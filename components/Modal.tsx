@@ -1,5 +1,6 @@
+
 import React, { useState, FormEvent, ChangeEvent, useEffect } from 'react';
-import { CloseIcon, InstagramIcon, StarIcon, WhatsAppIcon, DownloadIcon } from './Icons';
+import { CloseIcon, InstagramIcon, StarIcon, WhatsAppIcon, DownloadIcon, ContractIcon, DateReserveIcon, CreditCardIcon, UsersIcon } from './Icons';
 
 interface ModalProps {
   isOpen: boolean;
@@ -574,38 +575,49 @@ export const BudgetModalContent: React.FC = () => {
 const faqData = [
     {
         question: "Posso alterar o pacote depois de fechar o contrato?",
-        answer: "Sim! O mais importante é garantir a data para não correr o risco de ficarmos sem disponibilidade. O pacote e a escolha dos drinks podem ser definidos até uma semana antes do evento, mantendo os valores do orçamento original."
+        answer: "Sim! O mais importante é garantir a data para não correr o risco de ficarmos sem disponibilidade. O pacote e a escolha dos drinks podem ser definidos até uma semana antes do evento, mantendo os valores do orçamento original.",
+        icon: <ContractIcon />
     },
     {
         question: "Como faço para reservar minha data?",
-        answer: "É bem simples. Com uma entrada de apenas R$300,00, elaboramos o contrato e sua data fica garantida. O pagamento final é realizado somente na semana do evento."
+        answer: "É bem simples. Com uma entrada de apenas R$300,00, elaboramos o contrato e sua data fica garantida. O pagamento final é realizado somente na semana do evento.",
+        icon: <DateReserveIcon />
     },
     {
         question: "Quais são as formas de pagamento?",
-        answer: "Aceitamos parcelamento no cartão de crédito (com repasse da taxa da máquina) ou pagamentos parcelados via PIX/transferência até a data do evento, com cada pagamento validado por comprovante."
+        answer: "Aceitamos parcelamento no cartão de crédito (com repasse da taxa da máquina) ou pagamentos parcelados via PIX/transferência até a data do evento, com cada pagamento validado por comprovante.",
+        icon: <CreditCardIcon />
     },
     {
         question: "O que acontece se o número de convidados mudar?",
-        answer: "Não se preocupe. O valor final é ajustado na semana do evento, após a confirmação do número de convidados, de forma proporcional ao valor combinado."
+        answer: "Não se preocupe. O valor final é ajustado na semana do evento, após a confirmação do número de convidados, de forma proporcional ao valor combinado.",
+        icon: <UsersIcon />
     },
     {
         question: "Como funciona a contagem de convidados?",
-        answer: "Contabilizamos todos os convidados acima de 8 anos. Nossa proposta já considera a variação de consumo entre eles. Oferecemos um cardápio completo com drinks não alcoólicos para que todos possam aproveitar."
+        answer: "Contabilizamos todos os convidados acima de 8 anos. Nossa proposta já considera a variação de consumo entre eles. Oferecemos um cardápio completo com drinks não alcoólicos para que todos possam aproveitar.",
+        icon: <UsersIcon />
     }
 ];
 
 const FAQItem: React.FC<{
-    item: { question: string; answer: string };
+    item: { question: string; answer: string; icon: React.ReactNode };
     isOpen: boolean;
     onClick: () => void;
 }> = ({ item, isOpen, onClick }) => {
     return (
-        <div className="border-b border-stone-700/50">
+        <div className="border-b border-stone-800/80 last:border-b-0">
             <button
                 onClick={onClick}
-                className="w-full flex justify-between items-center text-left py-4 px-2 hover:bg-stone-900/30 rounded-md transition-colors duration-200"
+                className="w-full flex justify-between items-center text-left py-4 px-2 hover:bg-stone-900/30 rounded-t-lg transition-colors duration-200"
+                aria-expanded={isOpen}
             >
-                <span className="text-base font-medium text-neutral-200">{item.question}</span>
+                <div className="flex items-center space-x-4">
+                    <div className={`transition-transform duration-300 ease-in-out ${isOpen ? 'scale-110' : 'scale-100'}`}>
+                        <div className="w-6 h-6 text-red-600">{item.icon}</div>
+                    </div>
+                    <span className="text-base font-medium text-neutral-200">{item.question}</span>
+                </div>
                 <span className={`transform transition-transform duration-300 ${isOpen ? 'rotate-180' : 'rotate-0'}`}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -615,7 +627,9 @@ const FAQItem: React.FC<{
             <div
                 className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
             >
-                <p className="text-neutral-400 text-sm leading-relaxed pb-4 px-2">{item.answer}</p>
+                <div className="bg-black/20 rounded-b-lg p-4 pl-12 border-t border-stone-800/80">
+                    <p className="text-neutral-400 text-sm leading-relaxed text-justify">{item.answer}</p>
+                </div>
             </div>
         </div>
     );
@@ -623,7 +637,7 @@ const FAQItem: React.FC<{
 
 
 export const FAQModalContent: React.FC = () => {
-    const [openIndex, setOpenIndex] = useState<number | null>(null);
+    const [openIndex, setOpenIndex] = useState<number | null>(0);
 
     const handleItemClick = (index: number) => {
         setOpenIndex(openIndex === index ? null : index);
