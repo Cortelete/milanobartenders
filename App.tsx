@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { InstagramIcon, LocationIcon, AboutIcon, ReviewIcon, WhatsAppIcon, CalendarIcon } from './components/Icons';
-import { Modal, AboutModalContent, BookingModalContent, LocationModalContent, ReviewModalContent, DeveloperModalContent, BudgetModalContent } from './components/Modal';
+import { InstagramIcon, LocationIcon, AboutIcon, ReviewIcon, WhatsAppIcon, CalendarIcon, FAQIcon } from './components/Icons';
+import { Modal, AboutModalContent, BookingModalContent, LocationModalContent, ReviewModalContent, DeveloperModalContent, BudgetModalContent, FAQModalContent, BudgetCodeModalContent } from './components/Modal';
 
-type ModalType = 'none' | 'about' | 'booking' | 'location' | 'review' | 'developer' | 'budget';
+type ModalType = 'none' | 'about' | 'booking' | 'location' | 'review' | 'developer' | 'budget' | 'faq' | 'budgetCode';
 
 const App: React.FC = () => {
   const [activeModal, setActiveModal] = useState<ModalType>('none');
@@ -26,8 +26,12 @@ const App: React.FC = () => {
         return <ReviewModalContent onClose={() => setActiveModal('none')} />;
       case 'developer':
         return <DeveloperModalContent />;
+      case 'budgetCode':
+        return <BudgetCodeModalContent onCodeSuccess={() => setActiveModal('budget')} />;
       case 'budget':
         return <BudgetModalContent />;
+      case 'faq':
+        return <FAQModalContent />;
       default:
         return null;
     }
@@ -60,13 +64,14 @@ const App: React.FC = () => {
 
         <div className="links w-full flex flex-col space-y-4">
           <LinkButton icon={<AboutIcon />} text="Quem Somos?" onClick={handleLogoClick} />
-          <LinkButton icon={<CalendarIcon />} text="Orçamento 2025" onClick={() => setActiveModal('budget')} />
+          <LinkButton icon={<CalendarIcon />} text="Orçamento 2025" onClick={() => setActiveModal('budgetCode')} />
           <LinkButton icon={<WhatsAppIcon />} text="Contato WhatsApp" onClick={() => setActiveModal('booking')} />
           <a href="https://www.instagram.com/milano_bartenders/" target="_blank" rel="noopener noreferrer" className="w-full">
             <LinkButton icon={<InstagramIcon />} text="Instagram" />
           </a>
           <LinkButton icon={<LocationIcon />} text="Localização" onClick={() => setActiveModal('location')} />
           <LinkButton icon={<ReviewIcon />} text="Avalie-nos" onClick={() => setActiveModal('review')} />
+          <LinkButton icon={<FAQIcon />} text="Dúvidas Frequentes" onClick={() => setActiveModal('faq')} />
         </div>
       </main>
 

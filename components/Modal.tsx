@@ -37,6 +37,15 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
         .animate-simple-fade-in {
             animation: simple-fade-in 0.5s ease-in-out;
         }
+        @keyframes shake {
+          10%, 90% { transform: translate3d(-1px, 0, 0); }
+          20%, 80% { transform: translate3d(2px, 0, 0); }
+          30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+          40%, 60% { transform: translate3d(4px, 0, 0); }
+        }
+        .animate-shake {
+            animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+        }
       `}</style>
     </div>
   );
@@ -349,6 +358,55 @@ export const DeveloperModalContent: React.FC = () => {
     )
 };
 
+export const BudgetCodeModalContent: React.FC<{ onCodeSuccess: () => void }> = ({ onCodeSuccess }) => {
+    const [code, setCode] = useState('');
+    const [error, setError] = useState('');
+
+    const validCodes = ['7DIAS', 'MILANO2025', 'EXCLUSIVO', 'BAR2025', 'PROMO2025'];
+
+    const handleSubmit = (e: FormEvent) => {
+        e.preventDefault();
+        if (validCodes.includes(code.toUpperCase())) {
+            onCodeSuccess();
+        } else {
+            setError('Código inválido. Tente novamente.');
+        }
+    };
+
+    return (
+        <div className="text-center space-y-6">
+            <h2 className="text-3xl font-bold font-display bg-gradient-to-r from-stone-200 to-rose-200 animated-gradient bg-clip-text text-transparent">
+                Acesso ao Orçamento
+            </h2>
+            <p className="text-neutral-300">
+                Insira o código que você recebeu para visualizar os detalhes do orçamento de 2025.
+            </p>
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <input
+                    type="text"
+                    value={code}
+                    onChange={(e) => {
+                        setCode(e.target.value);
+                        if (error) setError('');
+                    }}
+                    placeholder="Seu código de acesso"
+                    className={`w-full p-3 bg-black/40 rounded-md border ${error ? 'border-red-500 animate-shake' : 'border-stone-700'} focus:outline-none focus:ring-2 ${error ? 'focus:ring-red-500' : 'focus:ring-stone-400'} text-neutral-300 text-center transition-all`}
+                    aria-invalid={!!error}
+                    aria-describedby={error ? "code-error" : undefined}
+                />
+                {error && <p id="code-error" className="text-red-500 text-sm">{error}</p>}
+                <button
+                    type="submit"
+                    className="w-full bg-red-800 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={!code}
+                >
+                    Acessar Orçamento
+                </button>
+            </form>
+        </div>
+    );
+};
+
 export const BudgetModalContent: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'gold' | 'diamond' | 'addons'>('gold');
     const [isDetailsExpanded, setIsDetailsExpanded] = useState(false);
@@ -363,13 +421,13 @@ export const BudgetModalContent: React.FC = () => {
     );
 
     const goldPlans = [
-        { name: 'Gold Standart', price: 'R$50,00', brands: ['Vodka Havenas ou Smirnoff', 'Gin Havenas ou Gordons', 'Rum Montila', 'Tequila brasileira', 'Energetico Baly ou Red Horse*'] },
+        { name: 'Gold Standart', price: 'R$50,00', brands: ['Vodka Bacco ou Smirnoff', 'Gin Bacco ou Gordons', 'Rum Montila', 'Tequila brasileira', 'Energetico Baly ou Red Horse*'] },
         { name: 'Gold Plus', price: 'R$60,00', brands: ['Vodka Absolut ou Stolichnaya', 'Gin Tanqueray ou Bombay', 'Rum Bacardi', 'Tequila José Cuervo', 'Energetico Baly ou Red horse*'] },
         { name: 'Gold Premium', price: 'R$75,00', brands: ['Vodka Grey Goose ou Ciroc', 'Gin Tanqueray Ten', 'Rum Havana Club', 'Tequila El Jimador', 'Energético Red Bull*', 'Plus de Soda italiana e vodka com energético'] }
     ];
 
     const diamondPlans = [
-        { name: 'Diamond Standart', price: 'R$60,00', brands: ['Vodka Havenas ou Smirnoff', 'Gin Havenas ou Gordons', 'Rum Montila', 'Tequila brasileira', 'Whiskey Jim Beam ou Red Label', 'Energetico Red Bull*'] },
+        { name: 'Diamond Standart', price: 'R$60,00', brands: ['Vodka Bacco ou Smirnoff', 'Gin Bacco ou Gordons', 'Rum Montila', 'Tequila brasileira', 'Whiskey Jim Beam ou Red Label', 'Energetico Red Bull*'] },
         { name: 'Diamond Plus', price: 'R$70,00', brands: ['Vodka Absolut ou Stolichnaya', 'Gin Tanqueray ou Bombay', 'Rum Bacardi', 'Tequila José Cuervo', 'Whiskey Jack Daniels', 'Energético Red Bull*'] },
         { name: 'Diamond Premium', price: 'R$85,00', brands: ['Vodka Grey Goose ou Ciroc', 'Gin Tanqueray Ten', 'Rum Havana Club', 'Tequila El Jimador', 'Whiskey Jack Daniels ou Chivas 12', 'Energético Red Bull*', 'Plus de Soda italiana e vodka com energético'] }
     ];
@@ -460,6 +518,7 @@ export const BudgetModalContent: React.FC = () => {
                     <p className="text-base font-semibold text-green-400">10% OFF fechando dentro de 7 dias</p>
                     <p className="text-sm text-neutral-400"><strong className="text-neutral-300">Carga horária:</strong> Até 7 horas de open bar</p>
                     <p className="text-sm text-neutral-400"><strong className="text-neutral-300">Forma de Pagamento:</strong> Entrada de R$300,00 e o restante até 1 dia antes do evento.</p>
+                    <p className="text-sm text-yellow-400/80 italic pt-2 border-t border-stone-700/50">Novidades em breve: Havenas Vodka e Gin, fique ligado!</p>
                 </div>
             )}
             
@@ -508,6 +567,83 @@ export const BudgetModalContent: React.FC = () => {
                 </div>
             </div>
 
+        </div>
+    );
+};
+
+const faqData = [
+    {
+        question: "Posso alterar o pacote depois de fechar o contrato?",
+        answer: "Sim! O mais importante é garantir a data para não correr o risco de ficarmos sem disponibilidade. O pacote e a escolha dos drinks podem ser definidos até uma semana antes do evento, mantendo os valores do orçamento original."
+    },
+    {
+        question: "Como faço para reservar minha data?",
+        answer: "É bem simples. Com uma entrada de apenas R$300,00, elaboramos o contrato e sua data fica garantida. O pagamento final é realizado somente na semana do evento."
+    },
+    {
+        question: "Quais são as formas de pagamento?",
+        answer: "Aceitamos parcelamento no cartão de crédito (com repasse da taxa da máquina) ou pagamentos parcelados via PIX/transferência até a data do evento, com cada pagamento validado por comprovante."
+    },
+    {
+        question: "O que acontece se o número de convidados mudar?",
+        answer: "Não se preocupe. O valor final é ajustado na semana do evento, após a confirmação do número de convidados, de forma proporcional ao valor combinado."
+    },
+    {
+        question: "Como funciona a contagem de convidados?",
+        answer: "Contabilizamos todos os convidados acima de 8 anos. Nossa proposta já considera a variação de consumo entre eles. Oferecemos um cardápio completo com drinks não alcoólicos para que todos possam aproveitar."
+    }
+];
+
+const FAQItem: React.FC<{
+    item: { question: string; answer: string };
+    isOpen: boolean;
+    onClick: () => void;
+}> = ({ item, isOpen, onClick }) => {
+    return (
+        <div className="border-b border-stone-700/50">
+            <button
+                onClick={onClick}
+                className="w-full flex justify-between items-center text-left py-4 px-2 hover:bg-stone-900/30 rounded-md transition-colors duration-200"
+            >
+                <span className="text-base font-medium text-neutral-200">{item.question}</span>
+                <span className={`transform transition-transform duration-300 ${isOpen ? 'rotate-180' : 'rotate-0'}`}>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                </span>
+            </button>
+            <div
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}
+            >
+                <p className="text-neutral-400 text-sm leading-relaxed pb-4 px-2">{item.answer}</p>
+            </div>
+        </div>
+    );
+};
+
+
+export const FAQModalContent: React.FC = () => {
+    const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+    const handleItemClick = (index: number) => {
+        setOpenIndex(openIndex === index ? null : index);
+    };
+
+    return (
+        <div className="space-y-4">
+            <h2 className="text-3xl font-bold font-display bg-gradient-to-r from-stone-200 to-rose-200 animated-gradient bg-clip-text text-transparent text-center mb-4">
+                Dúvidas Frequentes
+            </h2>
+            <div className="space-y-2">
+                {faqData.map((item, index) => (
+                    <FAQItem
+                        key={index}
+                        item={item}
+                        isOpen={openIndex === index}
+                        onClick={() => handleItemClick(index)}
+                    />
+                ))}
+            </div>
         </div>
     );
 };
