@@ -276,7 +276,7 @@ export const ReviewModalContent: React.FC<{onClose: () => void}> = ({onClose}) =
 
     if (feedbackStep) {
         return (
-             <form action="https://formsubmit.co/your-email@example.com" method="POST"> {/* TODO: Add formsubmit email */}
+             <form action="https://formsubmit.co/thalissonrodrigo@gmail.com" method="POST">
                 <h2 className="text-2xl font-bold font-display text-red-500 mb-4 text-center">Que pena!</h2>
                 <p className="text-neutral-300 mb-4 text-center">Lamentamos não ter atendido 100% suas expectativas. Por favor, conte-nos como podemos melhorar.</p>
                 <textarea name="feedback" placeholder="Sua sugestão é muito importante para nós..." rows={4} className="w-full p-3 bg-black/40 rounded-md border border-stone-700 focus:outline-none focus:ring-2 focus:ring-stone-400 mb-4"></textarea>
