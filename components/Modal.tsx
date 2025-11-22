@@ -280,7 +280,9 @@ export const ReviewModalContent: React.FC<{onClose: () => void}> = ({onClose}) =
                 <h2 className="text-2xl font-bold font-display text-red-500 mb-4 text-center">Que pena!</h2>
                 <p className="text-neutral-300 mb-4 text-center">Lamentamos não ter atendido 100% suas expectativas. Por favor, conte-nos como podemos melhorar.</p>
                 <textarea name="feedback" placeholder="Sua sugestão é muito importante para nós..." rows={4} className="w-full p-3 bg-black/40 rounded-md border border-stone-700 focus:outline-none focus:ring-2 focus:ring-stone-400 mb-4"></textarea>
-                <input type="hidden" name="_next" value="https://milano-bartenders-linktree.netlify.app/thank-you" /> {/* TODO: Create a thank you page */}
+                <input type="hidden" name="_next" value="https://milano-bartenders-linktree.netlify.app/thank-you" />
+                <input type="hidden" name="_subject" value="Novo Feedback - Milano Bartenders" />
+                <input type="hidden" name="_autoresponse" value="Obrigado pelo seu feedback. Vamos analisar com carinho!" />
                 <button type="submit" className="w-full bg-red-800 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition-colors">
                     Enviar Feedback
                 </button>
